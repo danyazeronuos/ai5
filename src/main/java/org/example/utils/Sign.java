@@ -1,10 +1,18 @@
 package org.example.utils;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
-public class Sign implements Function<Double, Double> {
+public class Sign implements BiFunction<Double, Double, Double> {
+    private static final double EPSILON = 1e-9;
+
     @Override
-    public Double apply(Double x) {
-        return x < 0 ? -1.0 : 1.0;
+    public Double apply(Double x, Double y) {
+        if (x < -EPSILON) {
+            return -1.0;
+        } else if (x > EPSILON) {
+            return 1.0;
+        } else {
+            return y;
+        }
     }
 }

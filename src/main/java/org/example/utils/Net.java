@@ -1,5 +1,7 @@
 package org.example.utils;
 
+import java.util.Arrays;
+
 public class Net {
     private final double[][] weight;
     private final Sign sign = new Sign();
@@ -30,16 +32,14 @@ public class Net {
                 double sum = 0;
 
                 for (int j = 0; j < input.length; j++) {
-                    sum += input[j] * weight[i][j];
+                    sum += input[j] * weight[j][i];
+                    result[i] = sign.apply(sum, result[i]);
                 }
 
-                result[i] = sign.apply(sum);
             }
 
-            // Проверяем на стабилизацию
             isStable = java.util.Arrays.equals(input, result);
 
-            // Обновляем состояние для следующей итерации
             input = result;
             iteration++;
         }
@@ -52,7 +52,7 @@ public class Net {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 if (row != col) {
-                    this.weight[row][col] += this.sign.apply(current[row] * current[col]);
+                    this.weight[row][col] += current[row] * current[col];
                 }
             }
         }
