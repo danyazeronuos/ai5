@@ -19,10 +19,11 @@ public class Net {
         }
     }
 
-    public double[] predict(double[] input, int iterations) {
+    public double[] predict(double[] input, int maxIterations) {
+        boolean isStable = false;
         int iteration = 0;
 
-        while (iteration < iterations) {
+        while (!isStable && iteration < maxIterations) {
             double[] result = new double[input.length];
 
             for (int i = 0; i < input.length; i++) {
@@ -35,12 +36,17 @@ public class Net {
                 result[i] = sign.apply(sum);
             }
 
+            // Проверяем на стабилизацию
+            isStable = java.util.Arrays.equals(input, result);
+
+            // Обновляем состояние для следующей итерации
             input = result;
             iteration++;
         }
 
         return input;
     }
+
 
     private void calculateWeight(double[] current, int size) {
         for (int row = 0; row < size; row++) {
